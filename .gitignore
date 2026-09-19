@@ -1,0 +1,48 @@
+# Node / Dependencies
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# Next.js / Build outputs
+.next/
+dist/
+build/
+out/
+.turbo/
+coverage/
+*.lcov
+
+# Environment & local settings
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# Docker / Databases / Local volumes
+postgres_data/
+redis_data/
+minio_data/
+*.sqlite
+*.sqlite-journal
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Junk
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Antigravity temporary / bootstrap files
+bootstrap_prompt.md
