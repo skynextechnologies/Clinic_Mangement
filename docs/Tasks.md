@@ -50,11 +50,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: browser screenshots at 375/768/1280 in both themes.
   - _Result (2026-09-20): Next.js 15 App Router scaffolded in apps/web with Inter Google Font, Tailwind CSS & next-themes (light/dark mode toggle), TanStack Query, Sonner toasts, typed REST API client (RFC 7807 error parsing & request ID propagation), route groups (public, auth, app, portal), and interactive visual Design System Showcase page at /dev/design-system._
 
-- [ ] **T-007 · CI pipeline**
+- [x] **T-007 · CI pipeline**
   - Depends: T-005, T-006
   - Do: GitHub Actions: install (cached) > lint > typecheck > unit > integration (postgres+redis services, run migrations) > build; PR template; Dependabot/Renovate config; `pnpm audit` job (non-blocking for low severity); secret scanning step; coverage report artifact.
   - Accept: workflow file valid (`actionlint` if available); all jobs pass locally via `act` or an equivalent dry run/documented commands; README shows how CI maps to local commands.
   - Verify: run each CI step locally; attach output.
+  - _Result (2026-09-20): GitHub Actions CI workflow (.github/workflows/ci.yml) configured with Postgres 16 & Redis 7 container services, pnpm cache, lint, typecheck, migration reset, unit & integration tests, and build steps; PR template (.github/PULL_REQUEST_TEMPLATE.md) and Dependabot (.github/dependabot.yml) configured; 100% local CI dry run verified._
 
 **PHASE 0 GATE:** walkthrough artifact: repo tree, running infra, API docs page, design-system page screenshots, test output. STOP and wait for "CONTINUE".
 

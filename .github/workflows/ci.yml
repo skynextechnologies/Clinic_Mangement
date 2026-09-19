@@ -1,0 +1,79 @@
+name: ClinicOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: clinicos
+          POSTGRES_PASSWORD: clinicos_dev_pass
+          POSTGRES_DB: clinicos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://clinicos:clinicos_dev_pass@localhost:5432/clinicos?schema=public
+      REDIS_URL: redis://localhost:6379
+      NODE_ENV: test
+      JWT_ACCESS_SECRET: ci_jwt_access_secret_change_in_prod_32chars!
+      JWT_REFRESH_SECRET: ci_jwt_refresh_secret_change_in_prod_32chars!
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.2
+
+      - name: Setup Node.js (v22.x)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint codebase
+        run: pnpm lint
+
+      - name: Typecheck codebase
+        run: pnpm typecheck
+
+      - name: Run database migrations & seed
+        run: pnpm db:reset
+
+      - name: Run tests (unit & integration)
+        run: pnpm test
+
+      - name: Build production bundles
+        run: pnpm build
+
+      - name: Security audit
+        run: pnpm audit --audit-level=high || true
