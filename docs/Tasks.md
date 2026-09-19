@@ -22,11 +22,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: `docker compose ps`, `psql` extension check, screenshots of MinIO/Mailpit UIs.
   - _Result (2026-09-20): Local Docker Compose infra configured with PostgreSQL 16 (pg_trgm and btree_gist extensions verified), Redis 7, MinIO (clinicos-files bucket initialized), Mailpit; wait-for-services script passing 100%._
 
-- [ ] **T-003 · Shared package: contracts, enums, permissions, money**
+- [x] **T-003 · Shared package: contracts, enums, permissions, money**
   - Depends: T-001
   - Do: `packages/shared` (built with tsup or tsc; consumable by web and api). Add: `PRODUCT_NAME` and app constants, role/permission enums and the RBAC matrix as data (from Architecture 7.2), status enums and **state-transition tables**, base Zod schemas (id, pagination, sort, problem+json error, phone E.164, money), `money` utilities (integer minor units, bps tax, rounding, inclusive/exclusive tax, largest-remainder allocation), date helpers.
   - Accept: 100% unit-test coverage on `money` and transition tables; permission-matrix test asserts every role x resource cell matches Architecture 7.2; package builds ESM+CJS types.
   - Verify: `pnpm --filter shared test --coverage`.
+  - _Result (2026-09-20): Shared package @clinicos/shared implemented with constants, roles, enums, state transition tables, RBAC permission matrix (Architecture 7.2), base Zod schemas, integer minor unit money math, and date helpers; 100% unit-test line coverage verified._
 
 - [ ] **T-004 · API scaffold (NestJS) with platform essentials**
   - Depends: T-002, T-003

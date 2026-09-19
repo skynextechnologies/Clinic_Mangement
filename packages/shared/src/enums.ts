@@ -1,0 +1,93 @@
+export enum AppointmentStatus {
+  SCHEDULED = 'SCHEDULED',
+  CONFIRMED = 'CONFIRMED',
+  CHECKED_IN = 'CHECKED_IN',
+  IN_CONSULTATION = 'IN_CONSULTATION',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  NO_SHOW = 'NO_SHOW',
+}
+
+export enum QueueStatus {
+  WAITING = 'WAITING',
+  CALLED = 'CALLED',
+  IN_CONSULTATION = 'IN_CONSULTATION',
+  DONE = 'DONE',
+  SKIPPED = 'SKIPPED',
+}
+
+export enum PriorityClass {
+  EMERGENCY = 'EMERGENCY',
+  SENIOR = 'SENIOR',
+  PREGNANT = 'PREGNANT',
+  NORMAL = 'NORMAL',
+}
+
+export enum EncounterStatus {
+  OPEN = 'OPEN',
+  SIGNED = 'SIGNED',
+}
+
+export enum PrescriptionStatus {
+  DRAFT = 'DRAFT',
+  ISSUED = 'ISSUED',
+  PARTIALLY_DISPENSED = 'PARTIALLY_DISPENSED',
+  DISPENSED = 'DISPENSED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum LabOrderStatus {
+  ORDERED = 'ORDERED',
+  SAMPLE_COLLECTED = 'SAMPLE_COLLECTED',
+  IN_PROCESS = 'IN_PROCESS',
+  RESULTED = 'RESULTED',
+  VERIFIED = 'VERIFIED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum LabResultFlag {
+  NORMAL = 'NORMAL',
+  LOW = 'LOW',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum StockMovementType {
+  RECEIPT = 'RECEIPT',
+  DISPENSE = 'DISPENSE',
+  RETURN = 'RETURN',
+  ADJUSTMENT = 'ADJUSTMENT',
+  EXPIRY_WRITE_OFF = 'EXPIRY_WRITE_OFF',
+  TRANSFER = 'TRANSFER',
+}
+
+export enum PurchaseOrderStatus {
+  DRAFT = 'DRAFT',
+  ORDERED = 'ORDERED',
+  PARTIALLY_RECEIVED = 'PARTIALLY_RECEIVED',
+  RECEIVED = 'RECEIVED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum InvoiceStatus {
+  DRAFT = 'DRAFT',
+  ISSUED = 'ISSUED',
+  PARTIALLY_PAID = 'PARTIALLY_PAID',
+  PAID = 'PAID',
+  VOID = 'VOID',
+}
+
+export enum PaymentMethod {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  WALLET = 'WALLET',
+  ONLINE = 'ONLINE',
+}
+
+export enum InsuranceClaimStatus {
+  SUBMITTED = 'SUBMITTED',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  SETTLED = 'SETTLED',
+}
