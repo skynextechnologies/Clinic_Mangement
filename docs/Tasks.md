@@ -15,11 +15,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: run the commands; attempt a bad commit; paste output in the report.
   - _Result (2026-09-20): Monorepo scaffolded with pnpm workspace + Turborepo; root tooling, ESLint 9 flat config, Prettier, Husky, Commitlint, and Vitest configured; all build, lint, typecheck, test steps passing 100%._
 
-- [ ] **T-002 · Local infrastructure with Docker Compose**
+- [x] **T-002 · Local infrastructure with Docker Compose**
   - Depends: T-001
   - Do: `infra/docker-compose.yml` with postgres 16+ (extensions `pg_trgm`, `btree_gist` enabled via init script), redis, minio (+ bucket init), mailpit; named volumes; healthchecks; `pnpm infra:up/down/reset`. Document ports (Architecture section 4). Add `infra/scripts/wait-for-services`.
   - Accept: `pnpm infra:up` brings all services healthy; you can connect to Postgres and confirm extensions; MinIO console and Mailpit UI reachable.
   - Verify: `docker compose ps`, `psql` extension check, screenshots of MinIO/Mailpit UIs.
+  - _Result (2026-09-20): Local Docker Compose infra configured with PostgreSQL 16 (pg_trgm and btree_gist extensions verified), Redis 7, MinIO (clinicos-files bucket initialized), Mailpit; wait-for-services script passing 100%._
 
 - [ ] **T-003 · Shared package: contracts, enums, permissions, money**
   - Depends: T-001

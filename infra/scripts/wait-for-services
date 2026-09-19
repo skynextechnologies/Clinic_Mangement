@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+echo "Waiting for PostgreSQL on port 5432..."
+until nc -z localhost 5432 2>/dev/null || pg_isready -h localhost -p 5432 2>/dev/null; do
+  sleep 1
+done
+echo "PostgreSQL is ready!"
+
+echo "Waiting for Redis on port 6379..."
+until nc -z localhost 6379 2>/dev/null; do
+  sleep 1
+done
+echo "Redis is ready!"
+
+echo "Waiting for MinIO on port 9000..."
+until curl -s http://localhost:9000/minio/health/live >/dev/null 2>&1; do
+  sleep 1
+done
+echo "MinIO is ready!"
+
+echo "Waiting for Mailpit on port 8025..."
+until curl -s http://localhost:8025/api/v1/info >/dev/null 2>&1; do
+  sleep 1
+done
+echo "Mailpit is ready!"
+
+echo "All local infrastructure services are healthy and responding!"

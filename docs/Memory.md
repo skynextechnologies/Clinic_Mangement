@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 0
-- **Last completed task:** T-001
-- **Next task:** T-002
-- **In progress / what remains:** T-002 local infrastructure with Docker Compose
+- **Last completed task:** T-002
+- **Next task:** T-003
+- **In progress / what remains:** T-003 Shared package (contracts, enums, permissions, money)
 - **Branch:** main
-- **Last commit:** feat(infra): T-001 monorepo scaffold and quality tooling
+- **Last commit:** feat(infra): add docker compose local infrastructure (T-002)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
@@ -54,11 +54,12 @@
 | Mail UI     | http://localhost:8025                                                              |
 | Storage UI  | http://localhost:9001                                                              |
 
-**Installed versions (fill in as installed):** node: v22.23.2 · pnpm: 12.4.2 · postgres: — · next: — · nest: — · prisma: — · tailwind: — · playwright: —
+**Installed versions (fill in as installed):** node: v22.23.2 · pnpm: 12.4.2 · postgres: 16.8 · redis: 7.4 · next: — · nest: — · prisma: — · tailwind: — · playwright: —
 
 ## 6. Gotchas and lessons learned
 
 - 2026-09-20 (T-001): pnpm v12 requires `pnpm approve-builds` for native binaries like `esbuild` and `packageManager` in `package.json`.
+- 2026-09-20 (T-002): Local host PostgreSQL service on port 5432 must be stopped (`sudo systemctl stop postgresql`) to allow docker container binding.
 
 ## 7. Open questions for the human
 
@@ -88,6 +89,7 @@
 
 Format: `YYYY-MM-DD · T-xxx · what was built · evidence (tests/screens) · notes`
 
+- 2026-09-20 · T-002 · Local infrastructure with Docker Compose · All 4 services healthy in docker ps; pg_trgm and btree_gist extensions verified; wait-for-services passed · Configured postgres 16, redis 7, minio + bucket init, mailpit.
 - 2026-09-20 · T-001 · Monorepo scaffold and quality tooling · pnpm build, lint, typecheck, test all green; commitlint verified · Scaffolded apps/api, apps/web, packages/shared, ESLint 9 flat config, Prettier, Husky, Commitlint, Vitest.
 
 ## 12. Resume checklist (for a fresh session)
