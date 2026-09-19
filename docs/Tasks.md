@@ -29,11 +29,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: `pnpm --filter shared test --coverage`.
   - _Result (2026-09-20): Shared package @clinicos/shared implemented with constants, roles, enums, state transition tables, RBAC permission matrix (Architecture 7.2), base Zod schemas, integer minor unit money math, and date helpers; 100% unit-test line coverage verified._
 
-- [ ] **T-004 · API scaffold (NestJS) with platform essentials**
+- [x] **T-004 · API scaffold (NestJS) with platform essentials**
   - Depends: T-002, T-003
   - Do: `apps/api` with NestJS; Zod-validated config (fail-fast); pino logger with redaction + request id; global exception filter (problem+json); response envelope interceptor; `nestjs-zod` validation pipe; Helmet, CORS allowlist, compression; throttler (Redis store); health endpoints (`/health/live`, `/health/ready` checking DB + Redis); Swagger at `/api/docs`; graceful shutdown; separate `worker.ts` entrypoint; test harness (Jest + Supertest) with factories folder.
   - Accept: API boots; invalid env fails fast with a clear message; unknown routes return problem+json; `/health/ready` reports DB and Redis; a sample integration test passes; logs contain requestId and no bodies.
   - Verify: `pnpm --filter api test`, curl the health and docs endpoints.
+  - _Result (2026-09-20): NestJS API scaffolded in apps/api with fail-fast Zod config, Pino logger, RFC 7807 problem+json exception filter, response envelope interceptor, Helmet, CORS, compression, Throttler, health endpoints (/health/live, /health/ready), Swagger OpenAPI docs (/api/docs), worker process entrypoint, and Supertest integration tests passing 100%._
 
 - [ ] **T-005 · Prisma setup, base schema, migrations, seed framework**
   - Depends: T-004

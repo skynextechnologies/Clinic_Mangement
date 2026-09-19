@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/__tests__/index.test.ts"],"version":"5.9.3"}
+{"root":["./src/app.module.ts","./src/index.ts","./src/main.ts","./src/worker.ts","./src/__tests__/index.test.ts","./src/common/config/config.schema.ts","./src/common/filters/problem-json.filter.ts","./src/common/interceptors/envelope.interceptor.ts","./src/modules/health/health.controller.ts","./src/modules/health/health.module.ts"],"version":"5.9.3"}
