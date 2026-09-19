@@ -36,11 +36,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: `pnpm --filter api test`, curl the health and docs endpoints.
   - _Result (2026-09-20): NestJS API scaffolded in apps/api with fail-fast Zod config, Pino logger, RFC 7807 problem+json exception filter, response envelope interceptor, Helmet, CORS, compression, Throttler, health endpoints (/health/live, /health/ready), Swagger OpenAPI docs (/api/docs), worker process entrypoint, and Supertest integration tests passing 100%._
 
-- [ ] **T-005 · Prisma setup, base schema, migrations, seed framework**
+- [x] **T-005 · Prisma setup, base schema, migrations, seed framework**
   - Depends: T-004
   - Do: Configure Prisma per **current official docs** (verify config format for the installed major version). Implement models: Branch, User, UserRole, UserBranch, StaffProfile, Department, StaffDepartment, Session, PasswordReset, Invitation, BackupCode, AuditLog, Setting, Sequence, FileObject (Architecture 5.2). Conventions from 5.1 (ids, timestamps, `@map`). Raw SQL migration: append-only triggers on `audit_log`; `Sequence` helper. Seed framework (idempotent) that creates default branch, OWNER user (from env, forced password change), default settings. `PrismaService` with a transaction helper and a branch-scope helper.
   - Accept: `pnpm db:reset` yields a clean DB with seed; trying to UPDATE/DELETE `audit_log` fails at DB level (tested); migrations apply from scratch in CI.
   - Verify: run reset twice (idempotent), run the trigger test.
+  - _Result (2026-09-20): Prisma setup with 15 base models, PostgreSQL raw SQL append-only trigger for audit_log, idempotent seed framework (MAIN branch, OWNER user, settings, sequences), PrismaService & PrismaModule, and integration test verifying DB trigger enforcement passing 100%._
 
 - [ ] **T-006 · Web scaffold (Next.js) with design system foundation**
   - Depends: T-003

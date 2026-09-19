@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 0
-- **Last completed task:** T-004
-- **Next task:** T-005
-- **In progress / what remains:** T-005 Prisma setup, base schema, migrations, seed framework
+- **Last completed task:** T-005
+- **Next task:** T-006
+- **In progress / what remains:** T-006 Web scaffold (Next.js) with design system foundation
 - **Branch:** main
-- **Last commit:** feat(api): add nestjs api scaffold with platform essentials (T-004)
+- **Last commit:** feat(db): add prisma setup, base schema, append-only triggers, and seed framework (T-005)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
@@ -89,6 +89,7 @@
 
 Format: `YYYY-MM-DD · T-xxx · what was built · evidence (tests/screens) · notes`
 
+- 2026-09-20 · T-005 · Prisma setup, base schema, migrations, seed framework · DB triggers test green, db:reset & idempotent seed verified · Created 15 base Prisma models, raw SQL append-only audit_log trigger migration, PrismaService/Module, idempotent seed framework, and trigger test suite.
 - 2026-09-20 · T-004 · API scaffold (NestJS) with platform essentials · All 4 tests green, Swagger docs at /api/docs, health probes passing · Scaffolded NestJS API with fail-fast Zod config, Pino logger, RFC 7807 exception filter, envelope interceptor, Helmet, CORS, compression, Throttler, health controller, worker process entrypoint, and Supertest integration harness.
 - 2026-09-20 · T-003 · Shared package: contracts, enums, permissions, money · 100% test coverage on money, transitions, permissions matrix · Built @clinicos/shared constants, roles, enums, state transition tables, Zod schemas, money math, and date helpers.
 - 2026-09-20 · T-002 · Local infrastructure with Docker Compose · All 4 services healthy in docker ps; pg_trgm and btree_gist extensions verified; wait-for-services passed · Configured postgres 16, redis 7, minio + bucket init, mailpit.

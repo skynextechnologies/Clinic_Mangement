@@ -1,0 +1,259 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  DOCTOR
+  NURSE
+  RECEPTIONIST
+  PHARMACIST
+  LAB_TECH
+  ACCOUNTANT
+  PATIENT
+}
+
+model Branch {
+  id               String   @id @default(uuid())
+  code             String   @unique
+  name             String
+  address          String?
+  phone            String?
+  email            String?
+  timezone         String   @default("UTC")
+  isActive         Boolean  @default(true)
+  letterheadFileId String?
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  userBranches UserBranch[]
+  settings     Setting[]
+  sequences    Sequence[]
+
+  @@map("branches")
+}
+
+model User {
+  id                 String    @id @default(uuid())
+  email              String    @unique
+  phone              String?
+  passwordHash       String    @map("password_hash")
+  firstName          String    @map("first_name")
+  lastName           String    @map("last_name")
+  isActive           Boolean   @default(true) @map("is_active")
+  mustChangePassword Boolean   @default(false) @map("must_change_password")
+  twoFactorEnabled   Boolean   @default(false) @map("two_factor_enabled")
+  twoFactorSecretEnc String?   @map("two_factor_secret_enc")
+  lastLoginAt        DateTime? @map("last_login_at")
+  failedLoginCount   Int       @default(0) @map("failed_login_count")
+  lockedUntil        DateTime? @map("locked_until")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  roles         UserRole[]
+  branches      UserBranch[]
+  staffProfile  StaffProfile?
+  departments   StaffDepartment[]
+  sessions      Session[]
+  passwordResets PasswordReset[]
+  backupCodes   BackupCode[]
+
+  @@map("users")
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+  @@map("user_roles")
+}
+
+model UserBranch {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  branchId  String   @map("branch_id")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, branchId])
+  @@map("user_branches")
+}
+
+model StaffProfile {
+  id                   String   @id @default(uuid())
+  userId               String   @unique @map("user_id")
+  specialty            String?
+  qualifications       String?
+  licenseNo            String?  @map("license_no")
+  signatureFileId      String?  @map("signature_file_id")
+  consultationFeeMinor Int      @default(0) @map("consultation_fee_minor")
+  slotMinutes          Int      @default(15) @map("slot_minutes")
+  bio                  String?
+  isPublic             Boolean  @default(true) @map("is_public")
+  photoFileId          String?  @map("photo_file_id")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("staff_profiles")
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  staffStaffDepartments StaffDepartment[]
+
+  @@map("departments")
+}
+
+model StaffDepartment {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  departmentId String   @map("department_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, departmentId])
+  @@map("staff_departments")
+}
+
+model Session {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  familyId         String    @map("family_id")
+  refreshTokenHash String    @map("refresh_token_hash")
+  userAgent        String?   @map("user_agent")
+  ip               String?
+  expiresAt        DateTime  @map("expires_at")
+  revokedAt        DateTime? @map("revoked_at")
+  replacedById     String?   @map("replaced_by_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+  @@map("sessions")
+}
+
+model PasswordReset {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_resets")
+}
+
+model Invitation {
+  id         String    @id @default(uuid())
+  email      String
+  roles      Json
+  branchIds  Json      @map("branch_ids")
+  tokenHash  String    @map("token_hash")
+  expiresAt  DateTime  @map("expires_at")
+  acceptedAt DateTime? @map("accepted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@map("invitations")
+}
+
+model BackupCode {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  codeHash  String    @map("code_hash")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("backup_codes")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  at        DateTime @default(now())
+  actorId   String?  @map("actor_id")
+  actorRole String?  @map("actor_role")
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  before    Json?
+  after     Json?
+  ip        String?
+  userAgent String?  @map("user_agent")
+  reason    String?
+  requestId String?  @map("request_id")
+
+  @@map("audit_log")
+}
+
+model Setting {
+  id        String   @id @default(uuid())
+  key       String
+  value     Json
+  branchId  String?  @map("branch_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([key, branchId])
+  @@map("settings")
+}
+
+model Sequence {
+  id        String   @id @default(uuid())
+  key       String
+  branchId  String?  @map("branch_id")
+  period    String   @default("GLOBAL")
+  next      Int      @default(1)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([key, branchId, period])
+  @@map("sequences")
+}
+
+model FileObject {
+  id           String   @id @default(uuid())
+  bucket       String
+  key          String
+  mime         String
+  sizeBytes    BigInt   @map("size_bytes")
+  sha256       String
+  ownerType    String   @map("owner_type")
+  ownerId      String   @map("owner_id")
+  category     String
+  uploadedById String?  @map("uploaded_by_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("file_objects")
+}
