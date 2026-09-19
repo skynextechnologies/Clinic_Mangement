@@ -8,6 +8,8 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { validateConfig } from './common/config/config.schema.js';
 import { ProblemJsonFilter } from './common/filters/problem-json.filter.js';
 import { EnvelopeInterceptor } from './common/interceptors/envelope.interceptor.js';
+import { PrismaModule } from './infra/prisma/prisma.module.js';
+import { AuthModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 
 @Module({
@@ -28,6 +30,8 @@ import { HealthModule } from './modules/health/health.module.js';
         limit: 100,
       },
     ]),
+    PrismaModule,
+    AuthModule,
     HealthModule,
   ],
   providers: [

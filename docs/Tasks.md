@@ -63,11 +63,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
 
 ## PHASE 1: Authentication, RBAC and Administration
 
-- [ ] **T-008 · Auth API: login, refresh rotation, logout, lockout, password reset**
+- [x] **T-008 · Auth API: login, refresh rotation, logout, lockout, password reset**
   - Depends: T-005
   - Do: Implement FR-AUTH-01..05, 07 (API side): argon2id, login with lockout and generic errors, access JWT (15 min), refresh rotation with hashed tokens and family reuse detection, httpOnly cookie settings, logout (single/all), forgot/reset password (hashed single-use token, email via mail service + Mailpit), change password, sessions list/revoke, `GET /auth/me`. Password policy (min 12, common-password list). Audit auth events. Rate limits on auth routes.
   - Accept: tests for: success, wrong password, lockout after 5 attempts, unlock after 15 min (time frozen), refresh rotation, **reuse detection revokes family**, reset token single use + expiry, sessions revoked after password reset, no user enumeration (same response/timing class).
   - Verify: integration tests; manual curl flow; inspect Mailpit for reset email.
+  - _Result (2026-09-20): Auth API implemented with argon2id password hashing, 5-attempt account lockout, 15m access JWT, httpOnly refresh token cookie rotation with family reuse detection, forgot/reset password, change password, sessions management, and Supertest integration tests passing 100%._
 
 - [ ] **T-009 · RBAC guards, permissions, branch scoping, audit interceptor**
   - Depends: T-008
