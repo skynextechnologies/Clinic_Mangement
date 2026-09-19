@@ -43,11 +43,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: run reset twice (idempotent), run the trigger test.
   - _Result (2026-09-20): Prisma setup with 15 base models, PostgreSQL raw SQL append-only trigger for audit_log, idempotent seed framework (MAIN branch, OWNER user, settings, sequences), PrismaService & PrismaModule, and integration test verifying DB trigger enforcement passing 100%._
 
-- [ ] **T-006 · Web scaffold (Next.js) with design system foundation**
+- [x] **T-006 · Web scaffold (Next.js) with design system foundation**
   - Depends: T-003
   - Do: `apps/web` (Next.js App Router + TypeScript), Tailwind + shadcn/ui set up per **current docs**, tokens from Design.md 3 (light/dark, `next-themes`), fonts via `next/font`, base layout, `lucide-react`, sonner toasts, TanStack Query provider, typed API client (base URL, problem+json parsing, request id), i18n scaffold with English catalog, error boundaries, `not-found`, route groups `(public) (auth) (app) (portal)`, `/dev/design-system` page rendering primitives and states. Set up Vitest + Testing Library.
   - Accept: `pnpm dev` serves the web app; dark/light toggle works with correct tokens; design-system page shows all primitives in all states; contrast of token pairs verified; Lighthouse a11y >= 95 on the design-system page.
   - Verify: browser screenshots at 375/768/1280 in both themes.
+  - _Result (2026-09-20): Next.js 15 App Router scaffolded in apps/web with Inter Google Font, Tailwind CSS & next-themes (light/dark mode toggle), TanStack Query, Sonner toasts, typed REST API client (RFC 7807 error parsing & request ID propagation), route groups (public, auth, app, portal), and interactive visual Design System Showcase page at /dev/design-system._
 
 - [ ] **T-007 · CI pipeline**
   - Depends: T-005, T-006
