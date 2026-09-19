@@ -8,11 +8,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
 
 ## PHASE 0: Foundation
 
-- [ ] **T-001 · Monorepo scaffold and quality tooling**
+- [x] **T-001 · Monorepo scaffold and quality tooling**
   - Depends: none
   - Do: Create pnpm workspace + Turborepo (`apps/api`, `apps/web`, `packages/shared`, `infra`). Root `tsconfig.base.json` (strict, `noUncheckedIndexedAccess`), ESLint (flat config) + Prettier, `.editorconfig`, Husky + lint-staged + Commitlint (Conventional Commits), root scripts (`dev`, `build`, `lint`, `typecheck`, `test`, `test:e2e`, `infra:up`, `infra:down`, `db:*`), `.nvmrc`, `.gitignore`, `.env.example` (skeleton), `README.md` (short).
   - Accept: `pnpm install && pnpm lint && pnpm typecheck && pnpm build` succeed on a clean clone; a bad commit message is rejected by the hook; import-cycle lint rule active.
   - Verify: run the commands; attempt a bad commit; paste output in the report.
+  - _Result (2026-09-20): Monorepo scaffolded with pnpm workspace + Turborepo; root tooling, ESLint 9 flat config, Prettier, Husky, Commitlint, and Vitest configured; all build, lint, typecheck, test steps passing 100%._
 
 - [ ] **T-002 · Local infrastructure with Docker Compose**
   - Depends: T-001

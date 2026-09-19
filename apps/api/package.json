@@ -1,0 +1,23 @@
+{
+  "name": "@clinicos/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:migrate": "echo 'Prisma migrate placeholder'",
+    "db:seed": "echo 'Prisma seed placeholder'",
+    "db:reset": "echo 'Prisma reset placeholder'"
+  },
+  "dependencies": {
+    "@clinicos/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
