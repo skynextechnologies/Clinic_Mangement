@@ -45,3 +45,103 @@ export function createApiEnvelopeSchema<T extends z.ZodTypeAny>(dataSchema: T) {
       .optional(),
   });
 }
+
+// Branch Schemas
+export const createBranchSchema = z.object({
+  code: z
+    .string()
+    .min(2)
+    .max(20)
+    .regex(/^[A-Z0-9_-]+$/, 'Code must be uppercase alphanumeric'),
+  name: z.string().min(2).max(100),
+  address: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().email().optional().or(z.literal('')),
+  timezone: z.string().default('UTC'),
+});
+
+export const updateBranchSchema = createBranchSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
+export const queryBranchSchema = paginationSchema.merge(sortSchema).extend({
+  search: z.string().optional(),
+  isActive: z.coerce.boolean().optional(),
+});
+
+// Department Schemas
+export const createDepartmentSchema = z.object({
+  name: z.string().min(2).max(100),
+  description: z.string().optional(),
+});
+
+export const updateDepartmentSchema = createDepartmentSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
+export const queryDepartmentSchema = paginationSchema.merge(sortSchema).extend({
+  search: z.string().optional(),
+  isActive: z.coerce.boolean().optional(),
+});
+
+// Room Schemas
+export const createRoomSchema = z.object({
+  branchId: z.string().min(1, 'Branch ID is required'),
+  departmentId: z.string().optional().nullable(),
+  name: z.string().min(1).max(100),
+  code: z.string().optional().nullable(),
+  type: z.string().optional().nullable(),
+});
+
+export const updateRoomSchema = createRoomSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
+export const queryRoomSchema = paginationSchema.merge(sortSchema).extend({
+  search: z.string().optional(),
+  branchId: z.string().optional(),
+  departmentId: z.string().optional(),
+  isActive: z.coerce.boolean().optional(),
+});
+
+// Staff & Invitation Schemas
+export const inviteStaffSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  roles: z.array(z.string()).min(1, 'At least one role is required'),
+  branchIds: z.array(z.string()).min(1, 'At least one branch is required'),
+});
+
+export const acceptInvitationSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  phone: z.string().optional(),
+});
+
+export const updateStaffUserSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  phone: z.string().optional().nullable(),
+  roles: z.array(z.string()).optional(),
+  branchIds: z.array(z.string()).optional(),
+  departmentIds: z.array(z.string()).optional(),
+});
+
+export const updateStaffProfileSchema = z.object({
+  specialty: z.string().optional().nullable(),
+  qualifications: z.string().optional().nullable(),
+  licenseNo: z.string().optional().nullable(),
+  consultationFeeMinor: z.number().int().min(0).optional(),
+  slotMinutes: z.number().int().min(5).max(240).optional(),
+  bio: z.string().optional().nullable(),
+  isPublic: z.boolean().optional(),
+});
+
+export const queryStaffSchema = paginationSchema.merge(sortSchema).extend({
+  search: z.string().optional(),
+  role: z.string().optional(),
+  branchId: z.string().optional(),
+  departmentId: z.string().optional(),
+  isActive: z.coerce.boolean().optional(),
+});

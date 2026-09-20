@@ -27,9 +27,15 @@ export class AuditInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const rawPath = (req.route && req.route.path) || req.url || '';
+    const rawPath =
+      typeof req.originalUrl === 'string'
+        ? req.originalUrl
+        : typeof req.url === 'string'
+          ? req.url
+          : '';
     const cleanPath = rawPath.replace(/^\/api\/v1\//, '').replace(/^\//, '');
-    const entity = cleanPath.split('/')[0] || 'system';
+    const entity =
+      (cleanPath && typeof cleanPath === 'string' ? cleanPath.split('/')[0] : 'system') || 'system';
 
     return next.handle().pipe(
       tap({
@@ -77,14 +83,22 @@ export class AuditInterceptor implements NestInterceptor {
 function sanitizeData(data: unknown): unknown {
   if (typeof data !== 'object' || data === null) return data;
   try {
-    const clone = { ...(data as Record<string, unknown>) };
-    const sensitiveKeys = ['password', 'passwordHash', 'token', 'refreshToken', 'secret'];
-    for (const key of sensitiveKeys) {
-      if (key in clone) {
-        delete clone[key];
+    const jsonStr = JSON.stringify(data, (key, value) => {
+      if (
+        [
+          'password',
+          'passwordHash',
+          'token',
+          'refreshToken',
+          'secret',
+          'twoFactorSecretEnc',
+        ].includes(key)
+      ) {
+        return undefined;
       }
-    }
-    return clone;
+      return value;
+    });
+    return JSON.parse(jsonStr);
   } catch {
     return undefined;
   }

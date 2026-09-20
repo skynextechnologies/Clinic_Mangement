@@ -17,6 +17,10 @@ import { AuditModule } from './modules/audit/audit.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard.js';
 import { HealthModule } from './modules/health/health.module.js';
+import { BranchesModule } from './modules/branches/branches.module.js';
+import { DepartmentsModule } from './modules/departments/departments.module.js';
+import { RoomsModule } from './modules/rooms/rooms.module.js';
+import { StaffModule } from './modules/staff/staff.module.js';
 
 @Module({
   imports: [
@@ -40,6 +44,10 @@ import { HealthModule } from './modules/health/health.module.js';
     AuditModule,
     AuthModule,
     HealthModule,
+    BranchesModule,
+    DepartmentsModule,
+    RoomsModule,
+    StaffModule,
   ],
   providers: [
     BranchScopeService,

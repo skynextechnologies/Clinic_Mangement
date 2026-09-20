@@ -52,18 +52,33 @@ export class ProblemJsonFilter implements ExceptionFilter {
           (typeof resObj.code === 'string' ? resObj.code : undefined) ||
           (typeof resObj.error === 'string' ? resObj.error : undefined) ||
           'BAD_REQUEST';
-        detail =
-          typeof resObj.message === 'string'
-            ? resObj.message
-            : Array.isArray(resObj.message)
-              ? resObj.message.join('; ')
-              : undefined;
         if (Array.isArray(resObj.message)) {
-          errors = resObj.message;
+          detail = resObj.message
+            .map((item) =>
+              typeof item === 'string'
+                ? item
+                : typeof item === 'object' && item !== null && 'message' in item
+                  ? String((item as Record<string, unknown>).message)
+                  : String(item),
+            )
+            .join('; ');
+          errors = resObj.message.map((item) =>
+            typeof item === 'string'
+              ? { message: item }
+              : typeof item === 'object' && item !== null
+                ? {
+                    message: (item as Record<string, unknown>).message || String(item),
+                    path: (item as Record<string, unknown>).path || [],
+                  }
+                : { message: String(item) },
+          );
+        } else {
+          detail = typeof resObj.message === 'string' ? resObj.message : undefined;
         }
       }
     } else if (exception instanceof Error) {
       detail = exception.message;
+      console.error('UNHANDLED EXCEPTION IN FILTER:', exception);
       this.logger.error(`Unhandled Exception: ${exception.message}`, exception.stack);
     }
 
@@ -78,6 +93,9 @@ export class ProblemJsonFilter implements ExceptionFilter {
       ...(errors ? { errors } : {}),
     };
 
+    process.stderr.write(
+      `[PROBLEM ERROR] status=${status} title=${title} detail=${detail} stack=${(exception as Error)?.stack}\n`,
+    );
     response.setHeader('Content-Type', 'application/problem+json');
     response.status(status).json(problemPayload);
   }

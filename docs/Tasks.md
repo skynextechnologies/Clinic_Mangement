@@ -98,11 +98,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: screenshots 375/768/1280 (light/dark) + Playwright role-visibility test.
   - _Result (2026-09-20): Staff app shell implemented with collapsible SidebarNav (role-filtered), TopBar with breadcrumbs & user menu, CommandPalette (Ctrl+K), KeyboardShortcutsDialog (?), PageHeader, Dashboard page, and 100% test & build green._
 
-- [ ] **T-013 · Staff, branches, departments, rooms (API + UI)**
+- [x] **T-013 · Staff, branches, departments, rooms (API + UI)**
   - Depends: T-009, T-012
   - Do: FR-STAFF-01..04: CRUD/deactivate users with roles and branches, invitations (email + accept flow), staff profile (photo/signature upload placeholder until T-017 wires storage; store fields now), departments, branches, rooms. DataTable pattern (server-side) built here and reused. Deactivation revokes sessions.
   - Accept: Owner can invite a doctor who accepts and logs in; deactivated user cannot log in and sessions die; validation and permission tests pass; DataTable supports sort/filter/pagination/column visibility.
   - Verify: integration + Playwright invite flow.
+  - _Result (2026-09-20): Room model added & migrated; CRUD endpoints for Branches, Departments, Rooms, and Staff (with invitations, acceptance flow, profile metadata updates, deactivation, and immediate session revocation); Deny-by-default route scanner passing 100%; Reusable server-side DataTable component and Web UI pages (/staff, /staff/[id], /branches, /departments, /rooms, /accept-invitation) built in Next.js web app; 100% test & build green._
 
 - [ ] **T-014 · Clinic settings and numbering**
   - Depends: T-013

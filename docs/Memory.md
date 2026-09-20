@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 1 (Foundation & Auth)
-- **Last completed task:** T-012
-- **Next task:** T-013 (Phase 1)
-- **In progress / what remains:** Task T-012 completed and verified; proceeding to T-013 (Staff, branches, departments, rooms API + UI).
+- **Last completed task:** T-013
+- **Next task:** T-014 (Phase 1)
+- **In progress / what remains:** Task T-013 completed and verified (Staff, branches, departments, rooms API + UI); proceeding to T-014 (Clinic settings and numbering).
 - **Branch:** main
-- **Last commit:** feat(shell): add staff app shell, collapsible sidebar, topbar, command palette, and keyboard shortcuts (T-012)
+- **Last commit:** feat(staff): implement staff, branches, departments, rooms API + UI (T-013)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
