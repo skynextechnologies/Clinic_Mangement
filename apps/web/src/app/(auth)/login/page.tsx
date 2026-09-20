@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { PRODUCT_NAME } from '@clinicos/shared';
 
 import { useAuth } from '../../../providers/auth-provider';
 
 export default function LoginPage() {
   const { login, verify2fa } = useAuth();
-  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,7 +41,7 @@ export default function LoginPage() {
         setRequires2Factor(true);
         setTempToken(res.tempToken);
       } else {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Invalid email or password';
@@ -60,7 +58,7 @@ export default function LoginPage() {
 
     try {
       await verify2fa(tempToken, totpCode);
-      router.push('/dashboard');
+      window.location.href = '/dashboard';
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Invalid authentication code or backup code';
       setError(msg);

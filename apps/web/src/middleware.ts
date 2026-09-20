@@ -5,8 +5,15 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
-  // Protect app routes (dashboard, security, etc.)
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/security')) {
+  // Protect app routes (dashboard, security, staff, branches, departments, rooms, etc.)
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/security') ||
+    pathname.startsWith('/staff') ||
+    pathname.startsWith('/branches') ||
+    pathname.startsWith('/departments') ||
+    pathname.startsWith('/rooms')
+  ) {
     if (!refreshToken) {
       const loginUrl = new URL('/login', request.url);
       return NextResponse.redirect(loginUrl);
@@ -23,5 +30,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/security/:path*', '/login'],
+  matcher: [
+    '/dashboard/:path*',
+    '/security/:path*',
+    '/staff/:path*',
+    '/branches/:path*',
+    '/departments/:path*',
+    '/rooms/:path*',
+    '/login',
+  ],
 };
