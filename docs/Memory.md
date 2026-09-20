@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 1 (Foundation & Auth)
-- **Last completed task:** T-010
-- **Next task:** T-011 (Phase 1)
-- **In progress / what remains:** Task T-010 completed and verified; proceeding to T-011 (Auth UI and session handling in Next.js).
+- **Last completed task:** T-011
+- **Next task:** T-012 (Phase 1)
+- **In progress / what remains:** Task T-011 completed and verified; proceeding to T-012 (App shell, navigation and command palette).
 - **Branch:** main
-- **Last commit:** feat(auth): add totp 2fa setup, verify, encrypted secret storage, and backup codes (T-010)
+- **Last commit:** feat(auth-ui): add AuthProvider, login, 2FA challenge, security page, and route middleware (T-011)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
@@ -89,6 +89,7 @@
 
 Format: `YYYY-MM-DD · T-xxx · what was built · evidence (tests/screens) · notes`
 
+- 2026-09-20 · T-011 · Auth UI, AuthProvider, 2FA challenge, security page & route middleware · Web build & tests 100% green · Built Next.js AuthProvider with in-memory tokens, silent refresh, login page with split layout, forgot/reset password, security page (2FA setup with QR code & backup codes display, sessions list/revoke), idle-timeout modal, and route middleware.
 - 2026-09-20 · T-010 · TOTP 2FA, encrypted secret storage, backup codes & step-up login · 13 E2E tests passing 100% · Implemented EncryptionService (AES-256-GCM), TotpService (otplib), 2FA setup/enable/verify/disable endpoints, single-use backup code consumption, and step-up login challenge.
 - 2026-09-20 · T-009 · RBAC guards, permissions matrix, branch scoping & audit interceptor · Deny-by-default route scanner & 10 E2E tests passing 100% · Implemented RequirePermissions decorator, PermissionsGuard, BranchScopeService, OwnershipPolicyService, AuditModule with AuditInterceptor mutation recording, and GET /audit endpoint.
 - 2026-09-20 · T-008 · Auth API: argon2id, login, refresh rotation, lockout, password reset · All tests green (e2e harness verifying argon2id, 5-attempt lockout, token rotation, reuse detection, password reset via Mailpit) · Implemented NestJS Auth module, Zod DTOs, Argon2id hashing, HTTP-only refresh token rotation with family reuse revocation, and account lockout.

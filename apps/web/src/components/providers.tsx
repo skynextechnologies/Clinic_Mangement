@@ -5,6 +5,9 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import React, { useState } from 'react';
 import { Toaster } from 'sonner';
 
+import { AuthProvider } from '../providers/auth-provider';
+import { SessionTimeoutDialog } from './auth/session-timeout-dialog';
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -22,8 +25,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
       <QueryClientProvider client={queryClient}>
-        {children}
-        <Toaster position="top-right" richColors closeButton />
+        <AuthProvider>
+          {children}
+          <SessionTimeoutDialog />
+          <Toaster position="top-right" richColors closeButton />
+        </AuthProvider>
       </QueryClientProvider>
     </NextThemesProvider>
   );

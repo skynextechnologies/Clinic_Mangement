@@ -84,11 +84,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: integration tests using `otplib` with frozen time.
   - _Result (2026-09-20): TOTP 2FA implemented with otplib, encrypted secret storage (AES-256-GCM), 10 single-use backup codes, login step-up flow, disable flow, backup codes regeneration, and 13 E2E tests passing 100%._
 
-- [ ] **T-011 · Auth UI and session handling**
+- [x] **T-011 · Auth UI and session handling**
   - Depends: T-006, T-008, T-010
   - Do: Login, forgot/reset, 2FA challenge, accept invitation, change password, sessions page, account security page (enable 2FA with QR), auth provider (in-memory token + silent refresh + request queue), `useCan/<Can>`, middleware redirects, idle-timeout dialog (FR-AUTH-08), session-expired flow. Follow Design 6.1.
   - Accept: full flows work in the browser; refresh survives page reload; tokens are never in localStorage; idle warning appears at T-60 s; keyboard-only login works; a11y checks pass.
   - Verify: Playwright test for login/logout/refresh/reset with Mailpit API; screenshots.
+  - _Result (2026-09-20): Auth UI implemented in Next.js web app with AuthProvider, login with 2FA challenge, forgot/reset password, security page (2FA setup with QR code & backup codes display, sessions list/revoke), idle-timeout dialog, route middleware, and 100% test & build green._
 
 - [ ] **T-012 · App shell, navigation and command palette**
   - Depends: T-011
