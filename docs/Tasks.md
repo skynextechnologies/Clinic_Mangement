@@ -77,11 +77,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: run the route-coverage test that scans all controllers.
   - _Result (2026-09-20): RBAC permissions system implemented with `@RequirePermissions()` decorator, `PermissionsGuard` checking shared role matrix, `BranchScopeService`, `OwnershipPolicyService`, `AuditInterceptor` for automated mutation logging, `GET /audit` endpoint, and Deny-by-Default route scanner test passing 100%._
 
-- [ ] **T-010 · TOTP two-factor authentication**
+- [x] **T-010 · TOTP two-factor authentication**
   - Depends: T-008
   - Do: FR-AUTH-06: setup (QR/secret), verify, disable (requires password), backup codes (hashed, single-use), login step-up flow, policy "mandatory for roles" (setting), encrypted secret storage (AES-256-GCM helper in `common/crypto` with key id).
   - Accept: enrollment > login requires code; backup code works once; wrong codes are rate-limited; secret encrypted at rest (test reads raw DB row).
   - Verify: integration tests using `otplib` with frozen time.
+  - _Result (2026-09-20): TOTP 2FA implemented with otplib, encrypted secret storage (AES-256-GCM), 10 single-use backup codes, login step-up flow, disable flow, backup codes regeneration, and 13 E2E tests passing 100%._
 
 - [ ] **T-011 · Auth UI and session handling**
   - Depends: T-006, T-008, T-010

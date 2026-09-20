@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
+import { EncryptionService } from '../../common/crypto/encryption.service.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
+import { TotpService } from './totp.service.js';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthGuard],
-  exports: [AuthService, JwtAuthGuard, JwtModule],
+  providers: [AuthService, JwtAuthGuard, EncryptionService, TotpService],
+  exports: [AuthService, JwtAuthGuard, JwtModule, EncryptionService, TotpService],
 })
 export class AuthModule {}

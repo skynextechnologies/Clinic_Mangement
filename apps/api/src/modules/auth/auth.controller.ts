@@ -26,6 +26,12 @@ import {
   LoginDto,
   ResetPasswordDto,
 } from './dto/auth.dto.js';
+import {
+  Disable2faDto,
+  Enable2faDto,
+  RegenerateBackupCodesDto,
+  Verify2faDto,
+} from './dto/totp.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @ApiTags('Auth')
@@ -66,12 +72,95 @@ export class AuthController {
     const requestId = (req.headers['x-request-id'] as string) || undefined;
     const result = await this.authService.login(dto, req.ip, req.headers['user-agent'], requestId);
 
-    this.setRefreshCookie(res, result.refreshToken);
+    if (result.requires2Factor) {
+      return {
+        requires2Factor: true,
+        tempToken: (result as { tempToken: string }).tempToken,
+      };
+    }
+
+    const session = result as {
+      accessToken: string;
+      refreshToken: string;
+      user: unknown;
+    };
+
+    this.setRefreshCookie(res, session.refreshToken);
 
     return {
+      requires2Factor: false,
+      accessToken: session.accessToken,
+      user: session.user,
+    };
+  }
+
+  @Public()
+  @Post('2fa/verify')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verify 2FA TOTP code or backup code during step-up login' })
+  async verify2fa(
+    @Body() dto: Verify2faDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const requestId = (req.headers['x-request-id'] as string) || undefined;
+    const result = await this.authService.verify2faLogin(
+      dto,
+      req.ip,
+      req.headers['user-agent'],
+      requestId,
+    );
+
+    this.setRefreshCookie(res, result.refreshToken!);
+
+    return {
+      requires2Factor: false,
       accessToken: result.accessToken,
       user: result.user,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
+  @ApiBearerAuth()
+  @Post('2fa/setup')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Generate TOTP secret and QR code URL for 2FA setup' })
+  async setup2fa(@CurrentUser('userId') userId: string) {
+    return this.authService.setup2fa(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
+  @ApiBearerAuth()
+  @Post('2fa/enable')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Enable 2FA with verified TOTP token' })
+  async enable2fa(@CurrentUser('userId') userId: string, @Body() dto: Enable2faDto) {
+    return this.authService.enable2fa(userId, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
+  @ApiBearerAuth()
+  @Post('2fa/disable')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Disable 2FA with password confirmation' })
+  async disable2fa(@CurrentUser('userId') userId: string, @Body() dto: Disable2faDto) {
+    return this.authService.disable2fa(userId, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
+  @ApiBearerAuth()
+  @Post('2fa/backup-codes')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Regenerate 10 backup codes' })
+  async regenerateBackupCodes(
+    @CurrentUser('userId') userId: string,
+    @Body() dto: RegenerateBackupCodesDto,
+  ) {
+    return this.authService.regenerateBackupCodes(userId, dto);
   }
 
   @Public()
