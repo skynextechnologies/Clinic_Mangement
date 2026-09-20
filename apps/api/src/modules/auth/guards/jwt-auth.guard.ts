@@ -1,16 +1,26 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import jwt from 'jsonwebtoken';
 
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator.js';
+import { IS_PUBLIC_KEY } from '../../../common/decorators/public.decorator.js';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly reflector: Reflector;
+
   constructor(
-    private readonly reflector: Reflector,
-    private readonly configService: ConfigService,
-  ) {}
+    @Inject(Reflector) reflector: Reflector,
+    @Inject(ConfigService) private readonly configService: ConfigService,
+  ) {
+    this.reflector = reflector || new Reflector();
+  }
 
   canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -35,8 +45,10 @@ export class JwtAuthGuard implements CanActivate {
     try {
       const payload = jwt.verify(token, jwtSecret) as Record<string, unknown>;
       request.user = {
+        id: payload.sub as string,
         userId: payload.sub as string,
         email: payload.email as string,
+        role: Array.isArray(payload.roles) ? payload.roles[0] : (payload.role as string),
         roles: (payload.roles as string[]) || [],
         branchIds: (payload.branchIds as string[]) || [],
         sessionId: payload.sid as string,

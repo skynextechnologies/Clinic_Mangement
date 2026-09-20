@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as argon2 from 'argon2';
 import crypto from 'node:crypto';
@@ -21,8 +27,8 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(ConfigService) private readonly configService: ConfigService,
   ) {}
 
   private hashToken(token: string): string {
@@ -489,33 +495,41 @@ export class AuthService {
    * GET /auth/me profile
    */
   async getMe(userId: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        phone: true,
-        firstName: true,
-        lastName: true,
-        isActive: true,
-        mustChangePassword: true,
-        twoFactorEnabled: true,
-        lastLoginAt: true,
-        roles: { select: { role: true } },
-        branches: { select: { branchId: true, isPrimary: true } },
-        staffProfile: true,
-      },
-    });
+    try {
+      if (!userId) {
+        throw new BadRequestException(`Invalid userId passed to getMe: ${userId}`);
+      }
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          email: true,
+          phone: true,
+          firstName: true,
+          lastName: true,
+          isActive: true,
+          mustChangePassword: true,
+          twoFactorEnabled: true,
+          lastLoginAt: true,
+          roles: { select: { role: true } },
+          branches: { select: { branchId: true, isPrimary: true } },
+          staffProfile: true,
+        },
+      });
 
-    if (!user) {
-      throw new UnauthorizedException('User not found');
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      return {
+        ...user,
+        roles: user.roles.map((r) => r.role),
+        branches: user.branches.map((b) => ({ branchId: b.branchId, isPrimary: b.isPrimary })),
+      };
+    } catch (err) {
+      console.error('ERROR IN getMe:', err);
+      throw err;
     }
-
-    return {
-      ...user,
-      roles: user.roles.map((r) => r.role),
-      branches: user.branches.map((b) => ({ branchId: b.branchId, isPrimary: b.isPrimary })),
-    };
   }
 
   /**

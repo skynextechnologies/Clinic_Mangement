@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 1 (Foundation & Auth)
-- **Last completed task:** T-008
-- **Next task:** T-009 (Phase 1)
-- **In progress / what remains:** T-008 Auth API completed and verified; proceeding to T-009 (RBAC guards, permissions matrix, branch scoping, audit interceptor).
+- **Last completed task:** T-009
+- **Next task:** T-010 (Phase 1)
+- **In progress / what remains:** Task T-009 completed and verified; proceeding to T-010 (TOTP two-factor authentication).
 - **Branch:** main
-- **Last commit:** feat(auth): add auth api with argon2id, login, refresh rotation, and lockout (T-008)
+- **Last commit:** feat(auth): add rbac guards, permissions matrix, branch scoping, and audit interceptor (T-009)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
@@ -89,6 +89,7 @@
 
 Format: `YYYY-MM-DD · T-xxx · what was built · evidence (tests/screens) · notes`
 
+- 2026-09-20 · T-009 · RBAC guards, permissions matrix, branch scoping & audit interceptor · Deny-by-default route scanner & 10 E2E tests passing 100% · Implemented RequirePermissions decorator, PermissionsGuard, BranchScopeService, OwnershipPolicyService, AuditModule with AuditInterceptor mutation recording, and GET /audit endpoint.
 - 2026-09-20 · T-008 · Auth API: argon2id, login, refresh rotation, lockout, password reset · All tests green (e2e harness verifying argon2id, 5-attempt lockout, token rotation, reuse detection, password reset via Mailpit) · Implemented NestJS Auth module, Zod DTOs, Argon2id hashing, HTTP-only refresh token rotation with family reuse revocation, and account lockout.
 - 2026-09-20 · T-007 · CI pipeline & Phase 0 Gate · CI workflow valid, 100% dry run passed locally · Configured GitHub Actions CI pipeline (.github/workflows/ci.yml) with Postgres 16 & Redis 7 services, PR template, Dependabot, and Phase 0 Gate Walkthrough.
 - 2026-09-20 · T-006 · Web scaffold (Next.js) with design system foundation · Next.js build green, /dev/design-system page live with tokens & themes · Built Next.js 15 App Router web app with Inter Google font, Tailwind CSS, next-themes dark/light mode toggle, TanStack Query, Sonner toasts, typed API client, route groups, and interactive Design System Showcase page.

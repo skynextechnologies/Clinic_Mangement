@@ -70,11 +70,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: integration tests; manual curl flow; inspect Mailpit for reset email.
   - _Result (2026-09-20): Auth API implemented with argon2id password hashing, 5-attempt account lockout, 15m access JWT, httpOnly refresh token cookie rotation with family reuse detection, forgot/reset password, change password, sessions management, and Supertest integration tests passing 100%._
 
-- [ ] **T-009 · RBAC guards, permissions, branch scoping, audit interceptor**
+- [x] **T-009 · RBAC guards, permissions, branch scoping, audit interceptor**
   - Depends: T-008
   - Do: `@RequirePermissions()` decorator + guard using the shared matrix; ownership policy helper; branch-scope enforcement helper for queries; **deny-by-default** (a test/lint fails when a controller route lacks a permission or an explicit `@Public()`); audit interceptor + `audit.record()` service; audit read endpoint (Owner/Admin).
   - Accept: matrix-driven tests for every role on sample routes (401/403/200); IDOR test (user from branch A cannot access branch B record); audit rows created for writes.
   - Verify: run the route-coverage test that scans all controllers.
+  - _Result (2026-09-20): RBAC permissions system implemented with `@RequirePermissions()` decorator, `PermissionsGuard` checking shared role matrix, `BranchScopeService`, `OwnershipPolicyService`, `AuditInterceptor` for automated mutation logging, `GET /audit` endpoint, and Deny-by-Default route scanner test passing 100%._
 
 - [ ] **T-010 · TOTP two-factor authentication**
   - Depends: T-008

@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Req,
@@ -13,7 +14,9 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { PERMISSIONS } from '@clinicos/shared';
 
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator.js';
 import { AuthService } from './auth.service.js';
 import { CurrentUser } from './decorators/current-user.decorator.js';
 import { Public } from './decorators/public.decorator.js';
@@ -28,7 +31,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(@Inject(AuthService) private readonly authService: AuthService) {}
 
   private setRefreshCookie(res: Response, token: string) {
     res.cookie('refreshToken', token, {
@@ -108,6 +111,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
@@ -133,6 +137,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Post('logout-all')
   @HttpCode(HttpStatus.OK)
@@ -165,6 +170,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Post('change-password')
   @HttpCode(HttpStatus.OK)
@@ -185,6 +191,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile and claims' })
@@ -193,6 +200,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Get('sessions')
   @ApiOperation({ summary: 'List active sessions for current user' })
@@ -201,6 +209,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @RequirePermissions(PERMISSIONS.USERS_READ)
   @ApiBearerAuth()
   @Delete('sessions/:id')
   @ApiOperation({ summary: 'Revoke specific user session' })

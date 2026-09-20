@@ -8,6 +8,7 @@
     "start": "node dist/main.js",
     "dev": "tsc --watch",
     "worker": "node dist/worker.js",
+    "test": "vitest run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
