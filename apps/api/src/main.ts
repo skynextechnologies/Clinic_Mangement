@@ -26,6 +26,7 @@ export async function bootstrap() {
   });
 
   app.enableShutdownHooks();
+  app.setGlobalPrefix('api/v1');
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('ClinicOS API')
