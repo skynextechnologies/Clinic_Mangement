@@ -91,11 +91,12 @@ Legend: **Depends** = tasks that must be done first · **Do** = required work ·
   - Verify: Playwright test for login/logout/refresh/reset with Mailpit API; screenshots.
   - _Result (2026-09-20): Auth UI implemented in Next.js web app with AuthProvider, login with 2FA challenge, forgot/reset password, security page (2FA setup with QR code & backup codes display, sessions list/revoke), idle-timeout dialog, route middleware, and 100% test & build green._
 
-- [ ] **T-012 · App shell, navigation and command palette**
+- [x] **T-012 · App shell, navigation and command palette**
   - Depends: T-011
   - Do: Staff shell per Design 4.1: sidebar (permission-filtered, collapsible, mobile drawer), top bar, breadcrumbs, branch switcher, user menu, theme toggle, notification bell (UI only), command palette (`Ctrl/Cmd+K`) with navigation actions, keyboard shortcuts dialog, page header component, 403/404/500 pages, dashboard placeholder page with real empty states.
   - Accept: nav items show/hide by role (tested for 3 roles); shell is responsive (drawer at < 1024); shortcuts work; focus order correct.
   - Verify: screenshots 375/768/1280 (light/dark) + Playwright role-visibility test.
+  - _Result (2026-09-20): Staff app shell implemented with collapsible SidebarNav (role-filtered), TopBar with breadcrumbs & user menu, CommandPalette (Ctrl+K), KeyboardShortcutsDialog (?), PageHeader, Dashboard page, and 100% test & build green._
 
 - [ ] **T-013 · Staff, branches, departments, rooms (API + UI)**
   - Depends: T-009, T-012

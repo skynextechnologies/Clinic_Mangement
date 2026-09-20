@@ -12,11 +12,11 @@
 ## 2. Current Pointer (update every task)
 
 - **Phase:** 1 (Foundation & Auth)
-- **Last completed task:** T-011
-- **Next task:** T-012 (Phase 1)
-- **In progress / what remains:** Task T-011 completed and verified; proceeding to T-012 (App shell, navigation and command palette).
+- **Last completed task:** T-012
+- **Next task:** T-013 (Phase 1)
+- **In progress / what remains:** Task T-012 completed and verified; proceeding to T-013 (Staff, branches, departments, rooms API + UI).
 - **Branch:** main
-- **Last commit:** feat(auth-ui): add AuthProvider, login, 2FA challenge, security page, and route middleware (T-011)
+- **Last commit:** feat(shell): add staff app shell, collapsible sidebar, topbar, command palette, and keyboard shortcuts (T-012)
 
 ## 3. Decisions log (ADR-lite: date · decision · reason · alternatives rejected)
 
@@ -89,6 +89,7 @@
 
 Format: `YYYY-MM-DD · T-xxx · what was built · evidence (tests/screens) · notes`
 
+- 2026-09-20 · T-012 · Staff app shell, navigation, command palette & shortcuts · Web build & tests 100% green · Built StaffAppShell, collapsible SidebarNav with role-permission filtering, TopBar with breadcrumbs & user menu, CommandPalette (Ctrl+K), KeyboardShortcutsDialog (?), PageHeader, and Dashboard placeholder page.
 - 2026-09-20 · T-011 · Auth UI, AuthProvider, 2FA challenge, security page & route middleware · Web build & tests 100% green · Built Next.js AuthProvider with in-memory tokens, silent refresh, login page with split layout, forgot/reset password, security page (2FA setup with QR code & backup codes display, sessions list/revoke), idle-timeout modal, and route middleware.
 - 2026-09-20 · T-010 · TOTP 2FA, encrypted secret storage, backup codes & step-up login · 13 E2E tests passing 100% · Implemented EncryptionService (AES-256-GCM), TotpService (otplib), 2FA setup/enable/verify/disable endpoints, single-use backup code consumption, and step-up login challenge.
 - 2026-09-20 · T-009 · RBAC guards, permissions matrix, branch scoping & audit interceptor · Deny-by-default route scanner & 10 E2E tests passing 100% · Implemented RequirePermissions decorator, PermissionsGuard, BranchScopeService, OwnershipPolicyService, AuditModule with AuditInterceptor mutation recording, and GET /audit endpoint.

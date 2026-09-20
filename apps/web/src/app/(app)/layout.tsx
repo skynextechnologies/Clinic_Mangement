@@ -1,25 +1,57 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import { CommandPalette } from '../../components/shell/command-palette';
+import { KeyboardShortcutsDialog } from '../../components/shell/keyboard-shortcuts-dialog';
+import { SidebarNav } from '../../components/shell/sidebar-nav';
+import { TopBar } from '../../components/shell/top-bar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex bg-background">
-      <aside className="w-64 border-r border-border bg-card p-4 hidden md:block">
-        <div className="font-bold text-lg mb-6 text-primary">🏥 ClinicOS Staff</div>
-        <nav className="space-y-1 text-sm font-medium text-muted-foreground">
-          <div className="px-3 py-2 rounded-md bg-accent text-accent-foreground font-semibold">
-            📊 Dashboard
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <SidebarNav isCollapsed={sidebarCollapsed} />
+      </div>
+
+      {/* Mobile Drawer Sidebar */}
+      {mobileDrawerOpen && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex lg:hidden">
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setMobileDrawerOpen(false)}
+          />
+          <div className="relative z-10 w-64 h-full">
+            <SidebarNav onCloseMobile={() => setMobileDrawerOpen(false)} />
           </div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">👥 Patients</div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">
-            📅 Appointments
-          </div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">🩺 Encounters</div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">🧪 Lab Orders</div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">💊 Pharmacy</div>
-          <div className="px-3 py-2 rounded-md hover:bg-muted/50 cursor-pointer">💳 Billing</div>
-        </nav>
-      </aside>
-      <main className="flex-1 p-6">{children}</main>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <TopBar
+          onToggleSidebar={() => {
+            if (window.innerWidth < 1024) {
+              setMobileDrawerOpen(!mobileDrawerOpen);
+            } else {
+              setSidebarCollapsed(!sidebarCollapsed);
+            }
+          }}
+          onOpenCommandPalette={() => setCommandPaletteOpen(true)}
+          onOpenShortcuts={() => setShortcutsOpen(true)}
+        />
+
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
+      </div>
+
+      {/* Command Palette & Shortcuts Dialogs */}
+      <CommandPalette isOpen={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
+      <KeyboardShortcutsDialog isOpen={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
     </div>
   );
 }
